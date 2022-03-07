@@ -143,15 +143,30 @@ func (d Download) mergeFiles(sections [][2]int) error {
 
 	}
 
+	items, _ := ioutil.ReadDir(".")
+	for _, item := range items {
+		if item.IsDir() {
+			continue
+		} else {
+			// handle file there
+			fmt.Println(item.Name())
+			if strings.Contains(item.Name(), "section-") {
+				os.Remove(item.Name())
+			}
+		}
+	}
+
 	return nil
 }
 
 func main() {
 	startTime := time.Now()
 	url := getInput()
+	downloadedOn := startTime.Format("01-02-2006")
+	fmt.Printf("downloads/download-%s.mp4", downloadedOn)
 	d := Download{
 		Url:           url,
-		TargetPath:    "download.mp4",
+		TargetPath:    fmt.Sprintf("downloads/download-%s.mp4", downloadedOn),
 		TotalSections: 10,
 	}
 
